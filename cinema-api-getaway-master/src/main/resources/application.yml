@@ -1,0 +1,30 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: zuulserver
+  cloud:
+    gateway:
+      routes:
+        - id: korisnicki-servis
+          uri: http://localhost:8080/api
+          predicates:
+            - Path=/korisnicki-servis/api/**
+        - id: raspored-servis
+          uri: http://localhost:8081/api
+          predicates:
+            - Path=/raspored-servis/api/**
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+
+zuul:
+  sensitiveHeaders: Cookie,Set-Cookie
+  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
